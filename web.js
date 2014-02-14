@@ -171,6 +171,8 @@ function addUser() {
 function clearDatabase() {
     var model = new UsersModel();
     model.TESTAPI_resetFixture(function(myResponse) {
+	console.log("YAY IM COOL");
+	console.log(myResponse);
 	var jsonResponse = {'errCode':SUCCESS};
 	console.log("Result:"+JSON.stringify(myResponse) === JSON.stringify(jsonResponse));
     });
