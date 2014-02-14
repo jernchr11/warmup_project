@@ -13,8 +13,9 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    connection.query("create table users ( user varchar(129) primary key, password varchar(129), count integer)", function(err) {
+    connection.query("CREATE TABLE users ( user varchar(129) PRIMARY KEY, password varchar(129), count INTEGER)", function(err) {
 	console.log("MYERROR: "+err);
+	console.log(err == null);
 	/*
 	connection.query("insert into users(user, password, integer) values ('a', 'b', 1)", function(err) {
 	    console.log(err);
