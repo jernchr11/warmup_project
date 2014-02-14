@@ -51,7 +51,10 @@ app.post("/users/add", function(req, res) {
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
     var model = new UsersModel(req, res, null);
-    model.TESTAPI_resetFixture(
+    model.TESTAPI_resetFixture(function(myResponse) {            
+	console.log(myResponse);
+	res.end(myResponse);
+    });
 });
 
 app.post("/TESTAPI/unitTests", function(req, res) {
