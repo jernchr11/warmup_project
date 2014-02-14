@@ -13,7 +13,6 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    console.log(err);
     var query = connection.query("SELECT username FROM users");
     query.on('row', function(row) {
 	console.log(row);
