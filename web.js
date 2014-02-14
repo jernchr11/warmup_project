@@ -13,19 +13,16 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    connection.query("insert into users(username, password, count) values ('b', 'c', 1)", function(err) {
-	console.log(err);
-	res.write("FINISHED");
-	var query = connection.query("SELECT username FROM users");
-	query.on('row', function(row) {
-	    console.log(row);
-	    res.send(row.username);
-	});
-	
-	query.on('end', function() { 
-	    client.end();
-	    res.end("DONE FOR GOOD");
-	});
+    console.log(err);
+    var query = connection.query("SELECT username FROM users");
+    query.on('row', function(row) {
+	console.log(row);
+	//res.send(row.username);
+    });
+    
+    query.on('end', function() { 
+	client.end();
+	res.end("DONE FOR GOOD");
     });
 });
 
