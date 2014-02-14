@@ -13,10 +13,10 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    connection.query("insert into users(username, password, integer) values ('a', 'b', 1)", function(err) {
+    connection.query("insert into users(username, password, count) values ('a', 'b', 1)", function(err) {
 	console.log(err);
 	res.write("FINISHED");
-	var query = client.query("SELECT * FROM users");
+	var query = connection.query("SELECT * FROM users");
 	query.on('row', function(row) {
 	    res.send(row);
 	    console.log(row);
