@@ -70,9 +70,8 @@ app.listen(port, function() {
 });
 
 
-function UsersModel(req, res, db) {
+function UsersModel() {
     this.TESTAPI_resetFixture = function(callback) {
-	res.set('Content-Type', 'application/json');
 	connection.query("delete from users", function(err, result) {
 	    // I don't know what happens if this actually fails because of a connection issue, for example
 	    var jsonResponse = {'errCode':SUCCESS};
