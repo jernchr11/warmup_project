@@ -12,9 +12,10 @@ app.use(logfmt.requestLogger());
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :D");
-    
+    console.log("TRYING SOMETHING");
     connection.query("create table users ( user varchar(129) primary key, password varchar(129), count integer)", function(err) {
-	console.log(err);
+	console.log("MYERROR: "+err);
+	/*
 	connection.query("insert into users(user, password, integer) values ('a', 'b', 1)", function(err) {
 	    console.log(err);
 	    res.write("FINISHED");
@@ -28,6 +29,7 @@ app.get("/", function(req,res) {
 		res.end("DONE FOR GOOD");
 	    });
 	});
+	*/
     });
 });
 
