@@ -92,7 +92,7 @@ function UsersModel(req, res, db) {
 	    }	
 	}
 	else {
-	    var query = connection.query("SELECT username FROM users)", function( err, result) {
+	    var query = connection.query("insert into users(username, password, count) values ('b', 'c', 1)", function( err, result) {
 		// user and password not found
 		console.log("r:"+result);
 		console.log("e:"+err);
