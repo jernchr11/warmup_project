@@ -55,7 +55,7 @@ function UsersModel(req, res, db) {
 	    }	
 	}
 	else {
-	    var query = connection.query("SELECT username FROM users where username = '"+user+"' and password = '"+password+"')", function( err, result) {
+	    var query = connection.query("SELECT username, count  FROM users where username = '"+user+"' and password = '"+password+"')", function( err, result) {
 		// user and password not found
 		console.log("r:"+result);
 		console.log("e:"+err);
