@@ -26,7 +26,6 @@ app.get("/", function(req,res) {
 	    client.end();
 	    res.end("DONE FOR GOOD");
 	});
-	});
     });
 });
 
