@@ -173,7 +173,7 @@ function clearDatabase() {
     model.TESTAPI_resetFixture(function(myResponse) {
 	console.log("YAY IM COOL");
 	console.log(myResponse);
-	var jsonResponse = {'errCode':SUCCESS};
+	var jsonResponse = {"errCode":SUCCESS};
 	console.log(jsonResponse);
 	console.log("OOMPALOOPMA"+(JSON.stringify(myResponse) === JSON.stringify(jsonResponse)));
     });
