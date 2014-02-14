@@ -15,6 +15,7 @@ app.get("/", function(req,res) {
     console.log("TRYING SOMETHING");
     var query = connection.query("SELECT username FROM users where username = 'c'");
     query.on('row', function(row) {
+	console.log("yolo");
 	console.log(row);
 	//res.send(row.username);
     });
