@@ -175,6 +175,6 @@ function clearDatabase() {
 	console.log(myResponse);
 	var jsonResponse = {"errCode":SUCCESS};
 	console.log(jsonResponse);
-	console.log("OOMPALOOPMA"+(JSON.stringify(myResponse) === JSON.stringify(jsonResponse)));
+	console.log("OOMPALOOPMA"+(myResponse === JSON.stringify(jsonResponse)));
     });
 }
