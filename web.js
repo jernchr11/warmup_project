@@ -22,7 +22,7 @@ app.use(logfmt.requestLogger());
 
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
-    res.send("Hi :P");
+    res.send("Backend API");
 });
 
 app.post("/users/login", function(req, res) {
@@ -82,7 +82,7 @@ function UsersModel(req, res, db) {
 
 
     this.add = function (user, password, callback) {
-	if (user.length <= 0 || user.length > MAX_USERNAME_LENGTH) {
+	if (user == null || user.length <= 0 || user.length > MAX_USERNAME_LENGTH) {
             var jsonResponse = {
 		'errCode': ERR_BAD_USERNAME
             };
@@ -120,7 +120,7 @@ function UsersModel(req, res, db) {
     
     
     this.login = function (user, password, callback) {
-	if (user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
+	if (user == null || user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
 	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
 	    callback(JSON.stringify(jsonResponse));
 	}
