@@ -13,25 +13,20 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    
-    connection.query("CREATE TABLE users ( username varchar(128), password varchar(128), count INTEGER, PRIMARY KEY(username))", function(err) {
-	console.log("MYERROR: "+err);
-	console.log(err == null);
-	/*
-	connection.query("insert into users(user, password, integer) values ('a', 'b', 1)", function(err) {
-	    console.log(err);
-	    res.write("FINISHED");
-	    var query = client.query("SELECT * FROM users");
-	    query.on('row', function(row) {
-		res.send(row);
-	    });
-
-	    query.on('end', function() { 
-		client.end();
-		res.end("DONE FOR GOOD");
-	    });
+    connection.query("insert into users(username, password, integer) values ('a', 'b', 1)", function(err) {
+	console.log(err);
+	res.write("FINISHED");
+	var query = client.query("SELECT * FROM users");
+	query.on('row', function(row) {
+	    res.send(row);
+	    console.log(row);
 	});
-	*/
+	
+	query.on('end', function() { 
+	    client.end();
+	    res.end("DONE FOR GOOD");
+	});
+	});
     });
 });
 
