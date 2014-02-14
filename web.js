@@ -50,6 +50,7 @@ app.post("/users/add", function(req, res) {
 });
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
+    res.set('Content-Type', 'application/json');
     var model = new UsersModel(req, res, null);
     model.TESTAPI_resetFixture(function(myResponse) {            
 	console.log(myResponse);
