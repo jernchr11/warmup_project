@@ -161,7 +161,7 @@ function UsersModel() {
 }
 
 
-function testaddUser() {
+function testAddUser() {
     var model = new UsersModel();
     model.TESTAPI_resetFixture(function(myResponse) {
 	model.add("u1", "p1", function(myResponse) {
@@ -177,7 +177,7 @@ function testaddUser() {
     });
 }
 
-function testclearDatabase() {
+function testClearDatabase() {
     var model = new UsersModel();
     model.TESTAPI_resetFixture(function(myResponse) {
 	var jsonResponse = {"errCode":SUCCESS};
