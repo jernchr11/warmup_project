@@ -13,16 +13,21 @@ var ERR_BAD_PASSWORD      =  -4;
 var MAX_USERNAME_LENGTH = 128;
 var MAX_PASSWORD_LENGTH = 128;
 
+app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); });
+
+/**
+   Connection shouldn't be global in any real situation... Javascript has been giving me troubles, so I just left the connection around
+   as a global variable.
+ **/
 
 var connection = new pg.Client(process.env.DATABASE_URL);
 connection.connect();
-app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); });
 
 app.use(logfmt.requestLogger());
 
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
-    res.send("Hi :P");
+    res.send("Backend API");
 });
 
 app.post("/users/login", function(req, res) {
@@ -30,35 +35,39 @@ app.post("/users/login", function(req, res) {
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel(req, res, pg);
-    model.login(POST["user"], POST["password"], function() {            
+    var model = new UsersModel();
+    model.login(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
     });
+});
 
 app.post("/users/add", function(req, res) {
     res.set('Content-Type', 'application/json');
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel(req, res, pg);
-    model.add(POST["user"], POST["password"], function() {            
+    var model = new UsersModel();
+    model.add(POST["user"], POST["password"], function(myResponse) {            
+	console.log(myResponse);
+	res.end(myResponse);
+    });
+});
+    
+app.post("/TESTAPI/resetFixture", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
     });
 });
 
-app.post("/TESTAPI/resetFixture", function(req, res) {
-    res.set('Content-Type', 'application/json');
-    connection.query("delete from users", function(err, result) {
-	// I don't know what happens if this actually fails because of a connection issue, for example
-	var jsonResponse = {'errCode':SUCCESS};
-	res.send(JSON.stringify(jsonResponse));
-    });
-});
-
 app.post("/TESTAPI/unitTests", function(req, res) {
     res.set('Content-Type', 'application/json');
+
+    testClearDatabase();
+    testAddUser();
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.send(JSON.stringify(jsonResponse));
 });
@@ -70,10 +79,18 @@ app.listen(port, function() {
 });
 
 
-function UsersModel(req, res, db) {
+function UsersModel() {
+    this.TESTAPI_resetFixture = function(callback) {
+	connection.query("delete from users", function(err, result) {
+	    // I don't know what happens if this actually fails because of a connection issue, for example
+	    var jsonResponse = {'errCode':SUCCESS};
+	    callback(JSON.stringify(jsonResponse));
+	});
+    }
+
 
     this.add = function (user, password, callback) {
-	if (user.length <= 0 || user.length > MAX_USERNAME_LENGTH) {
+	if (user == null || user.length <= 0 || user.length > MAX_USERNAME_LENGTH) {
             var jsonResponse = {
 		'errCode': ERR_BAD_USERNAME
             };
@@ -107,9 +124,88 @@ function UsersModel(req, res, db) {
 	    });
 	}
     }
-});
+    
+    
+    
+    this.login = function (user, password, callback) {
+	if (user == null || user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
+	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
+	    callback(JSON.stringify(jsonResponse));
 	}
-});	    
+	else if (password.length > MAX_PASSWORD_LENGTH) {
+	    var jsonResponse = {'errCode':ERR_BAD_PASSWORD};
+	    callback(JSON.stringify(jsonResponse));
+	}
+	else {
+	    var query = connection.query("SELECT username, count  FROM users where username = '"+user+"' and password = '"+password+"'", function( err, result) {
+		// user and password not found
+		console.log("r:"+result);
+		console.log("e:"+err);
+		if (result.rows.length == 0) {
+		    var jsonResponse = {'errCode':ERR_BAD_CREDENTIALS};
+		    callback(JSON.stringify(jsonResponse));
+		}
+		else {
+		    console.log("Login Successful");
+		    console.log(result.rows[0]);
+		    var count = result.rows[0].count;
+		    var query = connection.query("update users set count = count + 1 where username = '"+user+"'", function( err, result) {
+			var jsonResponse = {'errCode':SUCCESS,'count':(count+1)};
+			console.log("You signed in: "+(count+1)+" times");
+			callback(JSON.stringify(jsonResponse));
+		    });
+		}
+	    });	    
+	}
+    }
 }
+
+
+function testAddUser() {
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
+	model.add("u1", "p1", function(myResponse) {
+	    if (myResponse === JSON.stringify({'errCode': SUCCESS,'count': 1})) {
+		connection.query("SELECT username FROM users where username = 'u1' and password = 'p1'", function(err, result) {
+		    if (result.rows.length == 0) {
+			console.log("testAddUser "+false);
+		    }
+		    else {
+			console.log("testAddUser "+true);
+		    }
+		});
+	    }
+	    else {
+		console.log("testAddUser "+false);
+	    }
+	});
+    });
 }
+
+function testLogin() {
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
+	model.add("u1", "p1", function(myResponse) {
+	    if (myResponse === JSON.stringify({'errCode': SUCCESS,'count': 1})) {
+		model.login("u1", "p1", function(myResponse) {
+		    connection.query("SELECT count  FROM users where username = 'u1' and password = 'p1'", function(err, result) {
+			if (result.rows.length == 0) {
+			}
+		});
+		});
+	    }
+	    else {
+		console.log("testAddUser "+false);
+	    }
+	});
+    });
+}
+
+
+function testClearDatabase() {
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
+	var jsonResponse = {"errCode":SUCCESS};
+	console.log("testclearDatabase "+(myResponse === JSON.stringify(jsonResponse)));
+    });
 }

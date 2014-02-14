@@ -182,9 +182,25 @@ function testAddUser() {
     });
 }
 
-function testAddTwoUsers() {
-
-
+function testLogin() {
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
+	model.add("u1", "p1", function(myResponse) {
+	    if (myResponse === JSON.stringify({'errCode': SUCCESS,'count': 1})) {
+		connection.query("SELECT username, count  FROM users where username = 'u1' and password = 'p1'", function(err, result) {
+		    if (result.rows.length == 0) {
+			console.log("testAddUser "+false);
+		    }
+		    else {
+			console.log("testAddUser "+true);
+		    }
+		});
+	    }
+	    else {
+		console.log("testAddUser "+false);
+	    }
+	});
+    });
 }
 
 
