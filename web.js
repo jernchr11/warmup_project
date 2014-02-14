@@ -23,9 +23,6 @@ app.use(logfmt.requestLogger());
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
-    console.log("Beginning query:");
-
-
 });
 
 app.post("/users/login", function(req, res) {
@@ -58,10 +55,26 @@ function UsersModel(req, res, db) {
 	    }	
 	}
 	else {
-	    var jsonResponse = {'errCode':40};
-	    if (isWrite) {
-		res.send(JSON.stringify(jsonResponse));
-	    }
+	    var query = connection.query("SELECT username, count FROM users where username = '"+user+"' and password = '"+password+"')", function( err, result) {
+		// user and password not found
+		if (result.rows.length == 0) {
+		    var jsonResponse = {'errCode':ERR_BAD_CREDENTIALS};
+		    if (isWrite) {
+			res.end(JSON.stringify(jsonResponse));
+		    }
+		}
+		else {
+		    console.log("Login Successful");
+		    var count = result.rows[0].count;
+		    var query = connection.query("update users set count = count + 1 where username = '"+user+"')", function( err, result) {
+			var jsonResponse = {'errCode':SUCCESS,'count':(row.count+1)};
+			console.log("You signed in: "+(count+1)+" times");
+			if (isWrite) {
+			    res.end(JSON.stringify(jsonResponse));
+			}
+		    });
+		}
+	    });	    
 	}
     }
 }
