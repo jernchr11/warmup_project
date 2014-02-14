@@ -13,26 +13,45 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("Beginning query:");
-    var query = connection.query("SELECT username FROM users where username = 'a'", function( err, result) {
-	console.log("a: "+result.rows.length);
-    });
-    var query = connection.query("SELECT username FROM users where username = 'c'", function( err, result) {
-	console.log("c: "+ result.rows.length);
-    });
-    var query = connection.query("SELECT username FROM users", function( err, result) {
-	console.log("ab: "+ result.rows.length);
-    });
+
 
 });
 
 app.post("/users/login", function(req, res) {
-    res.set('Content-Type', 'text/plain');
+    res.set('Content-Type', 'application/json');
     console.log("SWAG BEAST");
     console.log(req.body);
-    res.end("swag");
+    var POST = JSON.parse(req.body);
+    console.log(POST["user"]);
+    console.log(POST["password"]);
+    res.send("swag");
 });
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
+
+
+function UsersModel(req, res, db) {
+    this.login = function (user, password, isWrite, callback) {
+	if (user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
+	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
+	    if (isWrite) {
+		res.send(JSON.stringify(jsonResponse));
+	    }	
+	}
+	else if (password.length > MAX_PASSWORD_LENGTH) {
+	    var jsonResponse = {'errCode':ERR_BAD_PASSWORD};
+	    if (isWrite) {
+		res.send(JSON.stringify(jsonResponse));
+	    }	
+	}
+	else {
+	    var jsonResponse = {'errCode':40};
+	    if (isWrite) {
+		res.send(JSON.stringify(jsonResponse));
+	    }
+	}
+    }
+}
