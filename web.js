@@ -12,21 +12,9 @@ app.use(logfmt.requestLogger());
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
-    console.log("TRYING SOMETHING");
-    var query = connection.query("SELECT username FROM users where username = 'c'");
-    query.on('row', function(row) {
-	console.log("yolo");
-	console.log(row);
-	//res.send(row.username);
-    });
-    query.on('error', function(error) {
-	console.log(error);
-	console.log("Username not found");
-    });
-    
-    query.on('end', function() { 
-	connection.end();
-	console.log("finished");
+    console.log("Beginning query:");
+    var query = connection.query("SELECT username FROM users where username = 'a'", function( err, result) {
+	console.log(result);
     });
 });
 
