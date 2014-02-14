@@ -19,12 +19,11 @@ app.get("/", function(req,res) {
 
 app.post("/users/login", function(req, res) {
     res.set('Content-Type', 'application/json');
-    console.log("SWAG BEAST");
-    console.log(req.body);
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    res.send(JSON.stringify({'lol':69}));
+    var model = new UsersModel(req, res, db);
+    model.login(POST["user"], POST["password"], true);
 });
 
 var port = Number(process.env.PORT || 5000);
