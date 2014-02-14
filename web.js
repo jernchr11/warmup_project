@@ -79,6 +79,7 @@ function UsersModel(req, res, db) {
 
 
     this.login = function (user, password, isWrite, callback) {
+	console.log("user length:"+user.length);
 	if (user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
 	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
 	    if (isWrite) {
