@@ -21,10 +21,10 @@ app.post("/users/login", function(req, res) {
     res.set('Content-Type', 'application/json');
     console.log("SWAG BEAST");
     console.log(req.body);
-    var POST = JSON.parse(req.body);
+    var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    res.send("swag");
+    res.send(JSON.stringify({'lol':69}));
 });
 
 var port = Number(process.env.PORT || 5000);
