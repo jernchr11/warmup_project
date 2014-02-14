@@ -27,7 +27,7 @@ app.use(logfmt.requestLogger());
 
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
-    res.send("Backend API");
+    res.end("Backend API------------------");
 });
 
 app.post("/users/login", function(req, res) {
@@ -70,7 +70,7 @@ app.post("/TESTAPI/unitTests", function(req, res) {
     testAddUser();
     testLogin();
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
-    res.send(JSON.stringify(jsonResponse));
+    res.end(JSON.stringify(jsonResponse));
 });
 
 
