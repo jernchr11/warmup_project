@@ -16,10 +16,10 @@ app.get("/", function(req,res) {
     connection.query("insert into users(username, password, count) values ('b', 'c', 1)", function(err) {
 	console.log(err);
 	res.write("FINISHED");
-	var query = connection.query("SELECT * FROM users");
+	var query = connection.query("SELECT username FROM users");
 	query.on('row', function(row) {
 	    console.log(row);
-	    res.send(JSON.stringify(row));
+	    res.send(row.username);
 	});
 	
 	query.on('end', function() { 
