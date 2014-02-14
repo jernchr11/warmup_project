@@ -35,7 +35,7 @@ app.post("/users/login", function(req, res) {
 	console.log(myResponse);
 	res.end(myResponse);
     });
-}
+});
 
 app.post("/users/add", function(req, res) {
     res.set('Content-Type', 'application/json');
