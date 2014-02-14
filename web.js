@@ -66,8 +66,8 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
 app.post("/TESTAPI/unitTests", function(req, res) {
     res.set('Content-Type', 'application/json');
 
-    clearDatabase();
-    addUser();
+    testClearDatabase();
+    testAddUser();
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.send(JSON.stringify(jsonResponse));
 });
@@ -161,16 +161,16 @@ function UsersModel() {
 }
 
 
-function addUser() {
+function testaddUser() {
     var model = new UsersModel();
     model.TESTAPI_resetFixture(function(myResponse) {
 	model.add("u1", "p1", function(myResponse) {
 	    connection.query("SELECT username, count  FROM users where username = 'u1' and password = 'p1'", function(err, result) {
 		if (result.rows.length == 0) {
-		    console.log("addUser "+false);
+		    console.log("testAddUser "+false);
 		}
 		else {
-		    console.log("addUser "+true);
+		    console.log("testAddUser "+true);
 		}
 	    });
 	});
