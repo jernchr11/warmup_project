@@ -43,6 +43,12 @@ app.post("/users/add", function(req, res) {
     model.add(POST["user"], POST["password"], true);
 });
 
+app.post("/TESTAPI/resetFixture", function(req, res) {
+    connection.query("delete from users", function(req, res) {
+	var jsonResponse = {'errCode':SUCCESS};
+	res.end(JSON.stringify(jsonResponse));
+    });
+});
 
 
 var port = Number(process.env.PORT || 5000);
@@ -74,7 +80,7 @@ function UsersModel(req, res, db) {
 	    }
 	} else {
 	    connection.query("insert into users(username, password, count) values ('"+user+"', '"+password+"', 1)", function(err, result) { 
-		// adding new user is successful
+		// adding new user succeeds
 		if (err == null) {
                     var jsonResponse = {
 			'errCode': SUCCESS,
