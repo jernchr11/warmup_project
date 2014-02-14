@@ -79,7 +79,6 @@ function UsersModel(req, res, db) {
 
 
     this.login = function (user, password, isWrite, callback) {
-	console.log("user length:"+user.length);
 	if (user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
 	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
 	    if (isWrite) {
@@ -93,7 +92,7 @@ function UsersModel(req, res, db) {
 	    }	
 	}
 	else {
-	    var query = connection.query("insert into users(username, password, count) values ('b', 'c', 1)", function( err, result) {
+	    var query = connection.query("SELECT username, count  FROM users where username = '"+user+"' and password = '"+password+"'", function( err, result) {
 		// user and password not found
 		console.log("r:"+result);
 		console.log("e:"+err);
@@ -106,7 +105,7 @@ function UsersModel(req, res, db) {
 		else {
 		    console.log("Login Successful");
 		    var count = result.rows[0].count;
-		    var query = connection.query("update users set count = count + 1 where username = '"+user+"')", function( err, result) {
+		    var query = connection.query("update users set count = count + 1 where username = '"+user+"'", function( err, result) {
 			var jsonResponse = {'errCode':SUCCESS,'count':(row.count+1)};
 			console.log("You signed in: "+(count+1)+" times");
 			if (isWrite) {
