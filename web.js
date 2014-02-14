@@ -22,7 +22,7 @@ app.post("/users/login", function(req, res) {
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel(req, res, db);
+    var model = new UsersModel(req, res, pg);
     model.login(POST["user"], POST["password"], true);
 });
 
