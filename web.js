@@ -44,7 +44,9 @@ app.post("/users/add", function(req, res) {
 });
 
 app.post("/TESTAPI/resetFixture", function(req, res) {
-    connection.query("delete from users", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    connection.query("delete from users", function(err, result) {
+	// I don't know what happens if this actually fails because of a connection issue, for example
 	var jsonResponse = {'errCode':SUCCESS};
 	res.send(JSON.stringify(jsonResponse));
     });
