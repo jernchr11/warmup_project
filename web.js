@@ -67,7 +67,7 @@ app.post("/TESTAPI/unitTests", function(req, res) {
     res.set('Content-Type', 'application/json');
 
     clearDatabase();
-
+    addUser();
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.send(JSON.stringify(jsonResponse));
 });
@@ -162,19 +162,25 @@ function UsersModel() {
 
 
 function addUser() {
-    //var model = new UsersModel();
-    //model.TESTAPI_resetFixture(function(myResponse) {
-    //	m
-    //  });
-}
-
-function clearDatabase() {
     var model = new UsersModel();
     model.TESTAPI_resetFixture(function(myResponse) {
-	console.log("YAY IM COOL");
-	console.log(myResponse);
+	model.add("u1", "p1", function(myResponse) {
+	    connection.query("SELECT username, count  FROM users where username = 'u1' and password = 'p1'", function(err, result) {
+		if (result.rows.length == 0) {
+		    console.log("addUser "+false);
+		}
+		else {
+		    console.log("addUser "+true);
+		}
+	    });
+	});
+    });
+}
+
+function testclearDatabase() {
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
 	var jsonResponse = {"errCode":SUCCESS};
-	console.log(jsonResponse);
-	console.log("OOMPALOOPMA"+(myResponse === JSON.stringify(jsonResponse)));
+	console.log("testclearDatabase "+(myResponse === JSON.stringify(jsonResponse)));
     });
 }
