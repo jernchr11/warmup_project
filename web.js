@@ -3,7 +3,13 @@ var express = require("express");
 var logfmt = require("logfmt");
 var app = express();
 var pg = require('pg');
+var http = require("http"),
+// And mysql module you've just installed.
+fs = require("fs");
 
+var sys = require('sys')
+var exec = require('child_process').exec;
+var child;
 
 var SUCCESS               =   1;
 var ERR_BAD_CREDENTIALS   =  -1;
@@ -65,10 +71,32 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
 
 app.post("/TESTAPI/unitTests", function(req, res) {
     res.set('Content-Type', 'application/json');
+    /*
+    fs.unlink('e.txt',function (err) {
+	// http://nodejs.org/api.html#_child_processes
+	
+	
+	// executes `pwd`
+	child = exec("nodeunit example.js >> e.txt", function (error, stdout, stderr) {
+	    console.log("finished");
+	    console.log(error);
+	    fs.readFile("e.txt", 'utf-8', function (error, data) {
+		// Write headers.
+            response.writeHead(200, {
+		'Content-Type': 'text/plain'
+            });
+		response.end(data);
+		console.log(data.search("1/2 assertions failed"));
+	    });
+	});
+    });
+    */
+
+
 
     //testClearDatabase();
     //testAddUser();
-    testLogin();
+    //testLogin();
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.end(JSON.stringify(jsonResponse));
 });
