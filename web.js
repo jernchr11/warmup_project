@@ -174,6 +174,7 @@ function clearDatabase() {
 	console.log("YAY IM COOL");
 	console.log(myResponse);
 	var jsonResponse = {'errCode':SUCCESS};
-	console.log("Result:"+JSON.stringify(myResponse) === JSON.stringify(jsonResponse));
+	console.log(jsonResponse);
+	console.log("OOMPALOOPMA"+JSON.stringify(myResponse) === JSON.stringify(jsonResponse));
     });
 }
