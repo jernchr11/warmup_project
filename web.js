@@ -34,6 +34,17 @@ app.post("/users/login", function(req, res) {
     model.login(POST["user"], POST["password"], true);
 });
 
+app.post("/users/add", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    var POST = req.body;
+    console.log(POST["user"]);
+    console.log(POST["password"]);
+    var model = new UsersModel(req, res, pg);
+    model.add(POST["user"], POST["password"], true);
+});
+
+
+
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
   console.log("Listening on " + port);
@@ -41,6 +52,32 @@ app.listen(port, function() {
 
 
 function UsersModel(req, res, db) {
+
+    this.add = function (user, password, isWrite, callback) {
+	if (user.length <= 0 || user.length > MAX_USERNAME_LENGTH) {
+            var jsonResponse = {
+		'errCode': ERR_BAD_USERNAME
+            };
+	    var myResponse = JSON.stringify(jsonResponse);
+            console.log(myResponse);
+	    if (isWrite) {
+		res.end(myResponse);
+	    }
+	} else if (password.length > MAX_PASSWORD_LENGTH) {
+            var jsonResponse = {
+		'errCode': ERR_BAD_PASSWORD
+            };
+	    var myResponse = JSON.stringify(jsonResponse);
+            console.log(myResponse);
+	    if (isWrite) {
+		res.end(myResponse);
+	    }
+	} else {
+	}
+    }
+
+
+
     this.login = function (user, password, isWrite, callback) {
 	if (user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
 	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
@@ -55,7 +92,7 @@ function UsersModel(req, res, db) {
 	    }	
 	}
 	else {
-	    var query = connection.query("SELECT username, count  FROM users where username = '"+user+"' and password = '"+password+"')", function( err, result) {
+	    var query = connection.query("SELECT username FROM users)", function( err, result) {
 		// user and password not found
 		console.log("r:"+result);
 		console.log("e:"+err);
