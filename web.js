@@ -13,10 +13,13 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    var query = connection.query("SELECT username FROM users");
+    var query = connection.query("SELECT username FROM users where username = 'a'");
     query.on('row', function(row) {
 	console.log(row);
 	//res.send(row.username);
+    });
+    query.on('error', function(error) {
+	console.log("Username not found");
     });
     
     query.on('end', function() { 
