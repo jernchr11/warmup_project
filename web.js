@@ -65,6 +65,9 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
 
 app.post("/TESTAPI/unitTests", function(req, res) {
     res.set('Content-Type', 'application/json');
+
+    clearDatabase();
+
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.send(JSON.stringify(jsonResponse));
 });
@@ -159,5 +162,16 @@ function UsersModel() {
 
 
 function addUser() {
+    //var model = new UsersModel();
+    //model.TESTAPI_resetFixture(function(myResponse) {
+    //	m
+    //  });
+}
 
+function clearDatabase() {
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
+	var jsonResponse = {'errCode':SUCCESS};
+	console.log("Result:"+JSON.stringify(myResponse) === JSON.stringify(jsonResponse));
+    });
 }
