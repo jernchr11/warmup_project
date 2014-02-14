@@ -13,9 +13,6 @@ var ERR_BAD_PASSWORD      =  -4;
 var MAX_USERNAME_LENGTH = 128;
 var MAX_PASSWORD_LENGTH = 128;
 
-
-var connection = new pg.Client(process.env.DATABASE_URL);
-connection.connect();
 app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); });
 
 app.use(logfmt.requestLogger());
@@ -26,6 +23,8 @@ app.get("/", function(req,res) {
 });
 
 app.post("/users/login", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
     res.set('Content-Type', 'application/json');
     var POST = req.body;
     console.log(POST["user"]);
@@ -34,10 +33,13 @@ app.post("/users/login", function(req, res) {
     model.login(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
+	connection.end();
     });
 });
 
 app.post("/users/add", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
     res.set('Content-Type', 'application/json');
     var POST = req.body;
     console.log(POST["user"]);
@@ -46,14 +48,19 @@ app.post("/users/add", function(req, res) {
     model.add(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
+	connection.end();
     });
 });
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
+    res.set('Content-Type', 'application/json');
     var model = new UsersModel(req, res, null);
     model.TESTAPI_resetFixture(function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
+	connection.end();
     });
 });
 
@@ -70,9 +77,8 @@ app.listen(port, function() {
 });
 
 
-function UsersModel(req, res, db) {
+function UsersModel(req, res, connection) {
     this.TESTAPI_resetFixture = function(callback) {
-	res.set('Content-Type', 'application/json');
 	connection.query("delete from users", function(err, result) {
 	    // I don't know what happens if this actually fails because of a connection issue, for example
 	    var jsonResponse = {'errCode':SUCCESS};
@@ -150,4 +156,11 @@ function UsersModel(req, res, db) {
 	    });	    
 	}
     }
+}
+
+
+function addUser() {
+    
+
+
 }
