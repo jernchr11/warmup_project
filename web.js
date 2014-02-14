@@ -53,7 +53,7 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
 });
 
 app.post("/TESTAPI/unitTests", function(req, res) {
-    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.set('Content-Type', 'application/json');
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.send(JSON.stringify(jsonResponse));
 });
