@@ -73,6 +73,30 @@ function UsersModel(req, res, db) {
 		res.end(myResponse);
 	    }
 	} else {
+	    connection.query("insert into users(username, password, count) values ('"+user+"', '"+password+"', 1)", function(err, result) { 
+		// adding new user is successful
+		if (err == null) {
+                    var jsonResponse = {
+			'errCode': SUCCESS,
+			'count': 1
+                    };
+		    var myResponse = JSON.stringify(jsonResponse);
+		    console.log(myResponse);
+		    if (isWrite) {
+			res.end(myResponse);
+		    }		    
+		}
+		else {
+		    var jsonResponse = {
+			'errCode': ERR_USER_EXISTS
+                    };
+		    var myResponse = JSON.stringify(jsonResponse);
+		    console.log(myResponse);
+		    if (isWrite) {
+			res.end(myResponse);
+		    }
+		}
+	    });
 	}
     }
 
