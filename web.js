@@ -71,12 +71,8 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
 
 app.post("/TESTAPI/unitTests", function(req, res) {
     res.set('Content-Type', 'application/json');
-    /*
     fs.unlink('e.txt',function (err) {
 	// http://nodejs.org/api.html#_child_processes
-	
-	
-	// executes `pwd`
 	child = exec("nodeunit example.js >> e.txt", function (error, stdout, stderr) {
 	    console.log("finished");
 	    console.log(error);
@@ -90,10 +86,6 @@ app.post("/TESTAPI/unitTests", function(req, res) {
 	    });
 	});
     });
-    */
-
-
-
     //testClearDatabase();
     //testAddUser();
     //testLogin();
