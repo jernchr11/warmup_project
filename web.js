@@ -31,7 +31,7 @@ app.post("/users/login", function(req, res) {
     console.log(POST["user"]);
     console.log(POST["password"]);
     var model = new UsersModel(req, res, pg);
-    model.login(POST["user"], POST["password"], function() {            
+    model.login(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
     });
@@ -42,7 +42,7 @@ app.post("/users/add", function(req, res) {
     console.log(POST["user"]);
     console.log(POST["password"]);
     var model = new UsersModel(req, res, pg);
-    model.add(POST["user"], POST["password"], function() {            
+    model.add(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
     });
