@@ -68,6 +68,7 @@ app.post("/TESTAPI/unitTests", function(req, res) {
 
     testClearDatabase();
     testAddUser();
+    testLogin();
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.send(JSON.stringify(jsonResponse));
 });
@@ -166,7 +167,7 @@ function testAddUser() {
     model.TESTAPI_resetFixture(function(myResponse) {
 	model.add("u1", "p1", function(myResponse) {
 	    if (myResponse === JSON.stringify({'errCode': SUCCESS,'count': 1})) {
-		connection.query("SELECT username, count  FROM users where username = 'u1' and password = 'p1'", function(err, result) {
+		connection.query("SELECT username FROM users where username = 'u1' and password = 'p1'", function(err, result) {
 		    if (result.rows.length == 0) {
 			console.log("testAddUser "+false);
 		    }
@@ -187,17 +188,19 @@ function testLogin() {
     model.TESTAPI_resetFixture(function(myResponse) {
 	model.add("u1", "p1", function(myResponse) {
 	    if (myResponse === JSON.stringify({'errCode': SUCCESS,'count': 1})) {
-		connection.query("SELECT username, count  FROM users where username = 'u1' and password = 'p1'", function(err, result) {
-		    if (result.rows.length == 0) {
-			console.log("testAddUser "+false);
-		    }
-		    else {
-			console.log("testAddUser "+true);
-		    }
+		model.login("u1", "p1", function(myResponse) {
+		    connection.query("SELECT count FROM users where username = 'u1' and password = 'p1'", function(err, result) {
+			if (result.rows.length == 0) {
+			    console.log("testLogin "+false);
+			}
+			else {
+			    console.log("testLogin "+(result.rows[0].count==2));
+			}
+		    });
 		});
 	    }
 	    else {
-		console.log("testAddUser "+false);
+		console.log("testLogin "+false);
 	    }
 	});
     });
