@@ -57,6 +57,7 @@ function UsersModel(req, res, db) {
 	else {
 	    var query = connection.query("SELECT username, count FROM users where username = '"+user+"' and password = '"+password+"')", function( err, result) {
 		// user and password not found
+		console.log(result);
 		if (result.rows.length == 0) {
 		    var jsonResponse = {'errCode':ERR_BAD_CREDENTIALS};
 		    if (isWrite) {
