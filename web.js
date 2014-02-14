@@ -14,7 +14,7 @@ app.get("/", function(req,res) {
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
     
-    connection.query("CREATE TABLE userblah ( user varchar(128), PRIMARY KEY(user))", function(err) {
+    connection.query("CREATE TABLE userblah ( fish varchar(128))", function(err) {
 	console.log("MYERROR: "+err);
 	console.log(err == null);
 	/*
