@@ -13,7 +13,7 @@ app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
     res.send("Hi :P");
     console.log("TRYING SOMETHING");
-    connection.query("CREATE TABLE users ( user varchar(129) PRIMARY KEY, password varchar(129), count INTEGER)", function(err) {
+    connection.query("CREATE TABLE distributors ( did integer, name varchar(40), PRIMARY KEY(did) )", function(err) {
 	console.log("MYERROR: "+err);
 	console.log(err == null);
 	/*
