@@ -11,7 +11,7 @@ app.use(logfmt.requestLogger());
 
 app.get("/", function(req,res) {
     res.set('Content-Type', 'text/plain');
-    res.send("Hi :D");
+    res.send("Hi :P");
     console.log("TRYING SOMETHING");
     connection.query("create table users ( user varchar(129) primary key, password varchar(129), count integer)", function(err) {
 	console.log("MYERROR: "+err);
