@@ -35,6 +35,7 @@ app.post("/users/login", function(req, res) {
 	console.log(myResponse);
 	res.end(myResponse);
     });
+}
 
 app.post("/users/add", function(req, res) {
     res.set('Content-Type', 'application/json');
@@ -47,7 +48,7 @@ app.post("/users/add", function(req, res) {
 	res.end(myResponse);
     });
 });
-
+    
 app.post("/TESTAPI/resetFixture", function(req, res) {
     res.set('Content-Type', 'application/json');
     connection.query("delete from users", function(err, result) {
@@ -107,9 +108,9 @@ function UsersModel(req, res, db) {
 	    });
 	}
     }
-
-
-
+    
+    
+    
     this.login = function (user, password, callback) {
 	if (user.length <= 0 ||  user.length > MAX_USERNAME_LENGTH) {
 	    var jsonResponse = {'errCode':ERR_BAD_USERNAME};
@@ -117,7 +118,7 @@ function UsersModel(req, res, db) {
 	}
 	else if (password.length > MAX_PASSWORD_LENGTH) {
 	    var jsonResponse = {'errCode':ERR_BAD_PASSWORD};
-		callback(JSON.stringify(jsonResponse));
+	    callback(JSON.stringify(jsonResponse));
 	}
 	else {
 	    var query = connection.query("SELECT username, count  FROM users where username = '"+user+"' and password = '"+password+"'", function( err, result) {
@@ -126,7 +127,7 @@ function UsersModel(req, res, db) {
 		console.log("e:"+err);
 		if (result.rows.length == 0) {
 		    var jsonResponse = {'errCode':ERR_BAD_CREDENTIALS};
-			callback(JSON.stringify(jsonResponse));
+		    callback(JSON.stringify(jsonResponse));
 		}
 		else {
 		    console.log("Login Successful");
