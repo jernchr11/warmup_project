@@ -46,7 +46,7 @@ app.post("/users/add", function(req, res) {
 app.post("/TESTAPI/resetFixture", function(req, res) {
     connection.query("delete from users", function(req, res) {
 	var jsonResponse = {'errCode':SUCCESS};
-	res.end(JSON.stringify(jsonResponse));
+	res.send(JSON.stringify(jsonResponse));
     });
 });
 
