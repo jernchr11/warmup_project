@@ -15,6 +15,11 @@ var MAX_PASSWORD_LENGTH = 128;
 
 app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); });
 
+/**
+   Connection shouldn't be global in any real situation... Javascript has been giving me troubles, so I just left the connection around
+   as a global variable.
+ **/
+
 var connection = new pg.Client(process.env.DATABASE_URL);
 connection.connect();
 
@@ -30,7 +35,7 @@ app.post("/users/login", function(req, res) {
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel(req, res, pg);
+    var model = new UsersModel();
     model.login(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
@@ -42,7 +47,7 @@ app.post("/users/add", function(req, res) {
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel(req, res, pg);
+    var model = new UsersModel();
     model.add(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
@@ -51,7 +56,7 @@ app.post("/users/add", function(req, res) {
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
     res.set('Content-Type', 'application/json');
-    var model = new UsersModel(req, res, null);
+    var model = new UsersModel();
     model.TESTAPI_resetFixture(function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
@@ -154,7 +159,5 @@ function UsersModel() {
 
 
 function addUser() {
-    
-
 
 }
