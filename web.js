@@ -20,7 +20,7 @@ app.get("/", function(req,res) {
     });
     
     query.on('end', function() { 
-	client.end();
+	connection.end();
 	res.end("DONE FOR GOOD");
     });
 });
