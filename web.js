@@ -189,6 +189,7 @@ function testLogin() {
 	model.add("u1", "p1", function(myResponse) {
 	    if (myResponse === JSON.stringify({'errCode': SUCCESS,'count': 1})) {
 		model.login("u1", "p1", function(myResponse) {
+		    console.log("login: "+myResponse);
 		    connection.query("SELECT count FROM users where username = 'u1' and password = 'p1'", function(err, result) {
 			if (result.rows.length == 0) {
 			    console.log("testLogin "+false);
