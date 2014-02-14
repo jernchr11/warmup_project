@@ -50,12 +50,8 @@ app.post("/users/add", function(req, res) {
 });
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
-    res.set('Content-Type', 'application/json');
-    connection.query("delete from users", function(err, result) {
-	// I don't know what happens if this actually fails because of a connection issue, for example
-	var jsonResponse = {'errCode':SUCCESS};
-	res.send(JSON.stringify(jsonResponse));
-    });
+    var model = new UsersModel(req, res, null);
+    model.TESTAPI_resetFixture(
 });
 
 app.post("/TESTAPI/unitTests", function(req, res) {
@@ -72,6 +68,15 @@ app.listen(port, function() {
 
 
 function UsersModel(req, res, db) {
+    this.TESTAPI_resetFixture = function(callback) {
+	res.set('Content-Type', 'application/json');
+	connection.query("delete from users", function(err, result) {
+	    // I don't know what happens if this actually fails because of a connection issue, for example
+	    var jsonResponse = {'errCode':SUCCESS};
+	    callback(JSON.stringify(jsonResponse));
+	});
+    }
+
 
     this.add = function (user, password, callback) {
 	if (user.length <= 0 || user.length > MAX_USERNAME_LENGTH) {
