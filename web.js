@@ -104,9 +104,10 @@ function UsersModel(req, res, db) {
 		}
 		else {
 		    console.log("Login Successful");
+		    console.log(result.rows[0]);
 		    var count = result.rows[0].count;
 		    var query = connection.query("update users set count = count + 1 where username = '"+user+"'", function( err, result) {
-			var jsonResponse = {'errCode':SUCCESS,'count':(row.count+1)};
+			var jsonResponse = {'errCode':SUCCESS,'count':(count+1)};
 			console.log("You signed in: "+(count+1)+" times");
 			if (isWrite) {
 			    res.end(JSON.stringify(jsonResponse));
