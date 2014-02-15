@@ -1,7 +1,5 @@
-var myModule = require('./web.js');
 
 exports.testSomething = function(test){
-	var myModel = new UsersModel();
     test.expect(1);
     test.ok(true, "this assertion should pass");
     test.done();
