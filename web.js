@@ -152,6 +152,7 @@ app.post("/users/login", function(req, res) {
     model.login(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
+	connection.end();
     });
 });
 
@@ -166,6 +167,7 @@ app.post("/users/add", function(req, res) {
     model.add(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
+	connection.end();
     });
 });
     
@@ -177,12 +179,11 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
     model.TESTAPI_resetFixture(function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
+	connection.end();
     });
 });
 
 app.post("/TESTAPI/unitTests", function(req, res) {
-    var connection = new pg.Client(process.env.DATABASE_URL);
-    connection.connect();
     res.set('Content-Type', 'application/json');
 
     // I tried... partial credit for setting up this much??
