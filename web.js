@@ -134,9 +134,6 @@ exports.UsersModel = UsersModel;
    as a global variable.
  **/
 
-var connection = new pg.Client(process.env.DATABASE_URL);
-connection.connect();
-
 app.use(logfmt.requestLogger());
 
 app.get("/", function(req,res) {
@@ -145,6 +142,8 @@ app.get("/", function(req,res) {
 });
 
 app.post("/users/login", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
     res.set('Content-Type', 'application/json');
     var POST = req.body;
     console.log(POST["user"]);
@@ -157,6 +156,8 @@ app.post("/users/login", function(req, res) {
 });
 
 app.post("/users/add", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
     res.set('Content-Type', 'application/json');
     var POST = req.body;
     console.log(POST["user"]);
@@ -169,6 +170,8 @@ app.post("/users/add", function(req, res) {
 });
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
     res.set('Content-Type', 'application/json');
     var model = new UsersModel(connection);
     model.TESTAPI_resetFixture(function(myResponse) {            
@@ -178,6 +181,8 @@ app.post("/TESTAPI/resetFixture", function(req, res) {
 });
 
 app.post("/TESTAPI/unitTests", function(req, res) {
+    var connection = new pg.Client(process.env.DATABASE_URL);
+    connection.connect();
     res.set('Content-Type', 'application/json');
 
     // I tried... partial credit for setting up this much??
