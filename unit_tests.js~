@@ -1,0 +1,20 @@
+
+exports.testClearDb = function(test){
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {
+	var jsonResponse = {"errCode":SUCCESS};
+	test.strictEqual((myResponse === JSON.stringify(jsonResponse)), true);
+    });
+    
+
+    var m = new UsersModel();
+	m.test();
+    test.expect(1);
+    test.ok(true, "this assertion should pass");
+    test.done();
+};
+
+exports.testSomethingElse = function(test){
+    test.ok(false, "this assertion should fail");
+    test.done();
+};

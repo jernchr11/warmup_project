@@ -22,7 +22,7 @@ var MAX_PASSWORD_LENGTH = 128;
 app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); });
 
 
-function UsersModel() {
+function UsersModel(connection) {
 
     this.TESTAPI_resetFixture = function(callback) {
 	connection.query("delete from users", function(err, result) {
@@ -149,7 +149,7 @@ app.post("/users/login", function(req, res) {
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel();
+    var model = new UsersModel(connection);
     model.login(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
@@ -161,7 +161,7 @@ app.post("/users/add", function(req, res) {
     var POST = req.body;
     console.log(POST["user"]);
     console.log(POST["password"]);
-    var model = new UsersModel();
+    var model = new UsersModel(connection);
     model.add(POST["user"], POST["password"], function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
@@ -170,7 +170,7 @@ app.post("/users/add", function(req, res) {
     
 app.post("/TESTAPI/resetFixture", function(req, res) {
     res.set('Content-Type', 'application/json');
-    var model = new UsersModel();
+    var model = new UsersModel(connection);
     model.TESTAPI_resetFixture(function(myResponse) {            
 	console.log(myResponse);
 	res.end(myResponse);
@@ -199,6 +199,8 @@ app.post("/TESTAPI/unitTests", function(req, res) {
     //testClearDatabase();
     //testAddUser();
     //testLogin();
+    //place holder for what should have been tests
+    //take a look at what my unit tests should have been.
     var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
     res.end(JSON.stringify(jsonResponse));
 
