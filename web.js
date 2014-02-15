@@ -21,81 +21,6 @@ var MAX_PASSWORD_LENGTH = 128;
 
 app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); });
 
-/**
-   Connection shouldn't be global in any real situation... Javascript has been giving me troubles, so I just left the connection around
-   as a global variable.
- **/
-
-var connection = new pg.Client(process.env.DATABASE_URL);
-connection.connect();
-
-app.use(logfmt.requestLogger());
-
-app.get("/", function(req,res) {
-    res.set('Content-Type', 'text/plain');
-    res.end("Backend API------------------");
-});
-
-app.post("/users/login", function(req, res) {
-    res.set('Content-Type', 'application/json');
-    var POST = req.body;
-    console.log(POST["user"]);
-    console.log(POST["password"]);
-    var model = new UsersModel();
-    model.login(POST["user"], POST["password"], function(myResponse) {            
-	console.log(myResponse);
-	res.end(myResponse);
-    });
-});
-
-app.post("/users/add", function(req, res) {
-    res.set('Content-Type', 'application/json');
-    var POST = req.body;
-    console.log(POST["user"]);
-    console.log(POST["password"]);
-    var model = new UsersModel();
-    model.add(POST["user"], POST["password"], function(myResponse) {            
-	console.log(myResponse);
-	res.end(myResponse);
-    });
-});
-    
-app.post("/TESTAPI/resetFixture", function(req, res) {
-    res.set('Content-Type', 'application/json');
-    var model = new UsersModel();
-    model.TESTAPI_resetFixture(function(myResponse) {            
-	console.log(myResponse);
-	res.end(myResponse);
-    });
-});
-
-app.post("/TESTAPI/unitTests", function(req, res) {
-    res.set('Content-Type', 'application/json');
-    fs.unlink('e.txt',function (err) {
-	// http://nodejs.org/api.html#_child_processes
-	child = exec("nodeunit example.js >> e.txt", function (error, stdout, stderr) {
-	    console.log("finished");
-	    console.log(error);
-	    fs.readFile("e.txt", 'utf-8', function (error, data) {
-		// Write headers.
-		console.log(data);
-		console.log("RESULT:"+data.search("1/2 assertions failed"));
-		var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
-		res.end(JSON.stringify(jsonResponse));
-	    });
-	});
-    });    //testClearDatabase();
-    //testAddUser();
-    //testLogin();
-
-});
-
-
-var port = Number(process.env.PORT || 5000);
-app.listen(port, function() {
-  console.log("Listening on " + port);
-});
-
 
 function UsersModel() {
     this.TESTAPI_resetFixture = function(callback) {
@@ -199,6 +124,86 @@ function testAddUser() {
 	});
     });
 }
+
+exports.UsersModel = UsersModel;
+
+
+/**
+   Connection shouldn't be global in any real situation... Javascript has been giving me troubles, so I just left the connection around
+   as a global variable.
+ **/
+
+var connection = new pg.Client(process.env.DATABASE_URL);
+connection.connect();
+
+app.use(logfmt.requestLogger());
+
+app.get("/", function(req,res) {
+    res.set('Content-Type', 'text/plain');
+    res.end("Backend API------------------");
+});
+
+app.post("/users/login", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    var POST = req.body;
+    console.log(POST["user"]);
+    console.log(POST["password"]);
+    var model = new UsersModel();
+    model.login(POST["user"], POST["password"], function(myResponse) {            
+	console.log(myResponse);
+	res.end(myResponse);
+    });
+});
+
+app.post("/users/add", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    var POST = req.body;
+    console.log(POST["user"]);
+    console.log(POST["password"]);
+    var model = new UsersModel();
+    model.add(POST["user"], POST["password"], function(myResponse) {            
+	console.log(myResponse);
+	res.end(myResponse);
+    });
+});
+    
+app.post("/TESTAPI/resetFixture", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    var model = new UsersModel();
+    model.TESTAPI_resetFixture(function(myResponse) {            
+	console.log(myResponse);
+	res.end(myResponse);
+    });
+});
+
+app.post("/TESTAPI/unitTests", function(req, res) {
+    res.set('Content-Type', 'application/json');
+    fs.unlink('e.txt',function (err) {
+	// http://nodejs.org/api.html#_child_processes
+	child = exec("nodeunit example.js >> e.txt", function (error, stdout, stderr) {
+	    console.log("finished");
+	    console.log(error);
+	    fs.readFile("e.txt", 'utf-8', function (error, data) {
+		console.log(data);
+		console.log("RESULT:"+data.search("1/2 assertions failed"));
+		var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
+		res.end(JSON.stringify(jsonResponse));
+	    });
+	});
+    });    //testClearDatabase();
+    //testAddUser();
+    //testLogin();
+
+});
+
+
+var port = Number(process.env.PORT || 5000);
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});
+
+
+
 
 function testLogin() {
     var model = new UsersModel();
