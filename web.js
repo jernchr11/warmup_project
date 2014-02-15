@@ -78,6 +78,7 @@ app.post("/TESTAPI/unitTests", function(req, res) {
 	    console.log(error);
 	    fs.readFile("e.txt", 'utf-8', function (error, data) {
 		// Write headers.
+		console.log(data);
 		console.log("RESULT:"+data.search("1/2 assertions failed"));
 		var jsonResponse = { 'nrFailed' : 0, 'output': "Success", 'totalTests': 10 };
 		res.end(JSON.stringify(jsonResponse));
