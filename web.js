@@ -23,6 +23,11 @@ app.configure(function(){ app.use(express.bodyParser()); app.use(app.router); })
 
 
 function UsersModel() {
+
+    this.test = function() {
+	console.log("TEST CALL");
+    }
+
     this.TESTAPI_resetFixture = function(callback) {
 	connection.query("delete from users", function(err, result) {
 	    // I don't know what happens if this actually fails because of a connection issue, for example
